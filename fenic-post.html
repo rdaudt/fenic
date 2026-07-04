@@ -1,0 +1,1073 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fenic for Enterprise Engineers: A Practical Readiness Review</title>
+  <style>
+    :root {
+      --ink: #172026;
+      --muted: #5d6975;
+      --paper: #f6f4ef;
+      --panel: #ffffff;
+      --line: #d8d6cf;
+      --accent: #146c68;
+      --accent-2: #8a4d1f;
+      --code: #101820;
+      --code-line: #26323d;
+      --good: #1d6b42;
+      --warn: #9a5a12;
+      --risk: #9b2f2f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.58;
+    }
+    a { color: var(--accent); text-decoration-thickness: 0.08em; text-underline-offset: 0.18em; }
+    header {
+      background: #162226;
+      color: #f8f6ef;
+      padding: 56px 24px 34px;
+      border-bottom: 6px solid var(--accent);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    .kicker {
+      color: #9bd4cd;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+    h1 { max-width: 940px; margin: 12px 0 18px; font-size: clamp(2rem, 4vw, 4.15rem); line-height: 1.05; letter-spacing: 0; }
+    header p { max-width: 830px; color: #dce4e2; font-size: 1.12rem; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .pill {
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 6px 12px;
+      color: #edf5f3;
+      background: rgba(255,255,255,.06);
+      font-size: 0.9rem;
+    }
+    main { padding: 34px 24px 72px; }
+    section { margin: 0 auto 34px; max-width: 1120px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 26px;
+      box-shadow: 0 12px 30px rgba(20, 24, 28, 0.06);
+    }
+    h2 { margin: 0 0 14px; font-size: 1.65rem; line-height: 1.2; letter-spacing: 0; }
+    h3 { margin: 0 0 8px; font-size: 1.15rem; letter-spacing: 0; }
+    p { margin: 0 0 14px; }
+    ul { margin: 0; padding-left: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .mini {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfaf6;
+    }
+    .mini strong { display: block; margin-bottom: 4px; }
+    .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .callout {
+      border-left: 5px solid var(--accent-2);
+      background: #fff8ed;
+      padding: 16px 18px;
+      border-radius: 6px;
+    }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 8px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 13px 14px; vertical-align: top; text-align: left; }
+    th { width: 220px; color: #233039; background: #f0eee8; }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    .script-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px rgba(20, 24, 28, 0.05);
+    }
+    .script-head { margin-bottom: 14px; }
+    .eyebrow { display: block; color: var(--accent-2); font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0; margin-bottom: 4px; }
+    .command {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f7f6f1;
+      padding: 10px 12px;
+      margin: 14px 0;
+      overflow-x: auto;
+    }
+    .command span { color: var(--muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; flex: 0 0 auto; }
+    code, pre { font-family: "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .codeblock {
+      margin: 10px 0 0;
+      max-height: 520px;
+      overflow: auto;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--code-line);
+      color: #e7edf3;
+      background: var(--code);
+      font-size: 0.86rem;
+      line-height: 1.45;
+      white-space: pre;
+    }
+    details { margin-top: 12px; }
+    summary { cursor: pointer; font-weight: 800; color: #24313a; }
+    .source-note { color: var(--muted); font-size: 0.94rem; }
+    .source-note code, .command code { color: #1c252d; }
+    footer { max-width: 1120px; margin: 0 auto; color: var(--muted); padding: 0 24px 48px; }
+    @media (max-width: 820px) {
+      header { padding-top: 38px; }
+      .grid, .proscons { grid-template-columns: 1fr; }
+      .panel, .script-card { padding: 18px; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 0; padding-bottom: 4px; }
+      td { padding-top: 4px; }
+      .command { align-items: flex-start; flex-direction: column; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="kicker">Enterprise engineering review</div>
+      <h1>Fenic turns semantic data work into inspectable DataFrame pipelines</h1>
+      <p>Fenic is a Python DataFrame engine for structured and unstructured data where LLM calls, embeddings, extraction, classification, summarization, semantic joins, and clustering are operators in the query plan rather than side scripts.</p>
+      <div class="meta">
+        <span class="pill">Installed package: fenic 0.10.0</span>
+        <span class="pill">12 local operator scripts executed</span>
+        <span class="pill">Self-contained HTML</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Executive Summary</h2>
+      <p>For enterprise engineers, Fenic is best understood as semantic DataFrames for reusable LLM and data pipelines. The project README describes it as a semantic DataFrame engine with PySpark/SQL-style operations plus AI operators such as <code>extract</code>, <code>classify</code>, <code>summarize</code>, <code>embed</code>, semantic joins, lazy plans, session-level model configuration, batching, rate limiting, retries, token and cost accounting, caching, lineage, and query metrics. Source: <a href="https://github.com/typedef-ai/fenic">typedef-ai/fenic README</a>.</p>
+      <p>The practical value is not that Fenic removes probabilistic behavior from LLMs. It puts that behavior inside typed, inspectable, rerunnable pipelines that can be reviewed, cached, promoted, and exposed to agents or downstream systems.</p>
+      <div class="callout">
+        Running these examples may create local <code>.duckdb</code> artifacts and may incur OpenAI API costs through <code>OPENAI_API_KEY</code>. Treat local caches, databases, prompts, input rows, and model outputs as sensitive unless your data classification says otherwise.
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Where It Fits</h2>
+      <div class="grid">
+        <div class="mini"><strong>Support-ticket triage</strong>Extract products, severity, sentiment, root cause, and routing fields from messy customer text.</div>
+        <div class="mini"><strong>Document extraction</strong>Parse PDFs or text-heavy documents into typed rows for review, search, and workflow automation.</div>
+        <div class="mini"><strong>Eval analysis</strong>Classify agent traces, summarize failures, and rerun the same analysis against new model versions.</div>
+        <div class="mini"><strong>Semantic joins</strong>Match records by meaning when exact keys do not exist, such as incidents to policies or resumes to roles.</div>
+        <div class="mini"><strong>Summarization pipelines</strong>Reduce many rows into concise group summaries after filtering and joining with structured metadata.</div>
+        <div class="mini"><strong>Agent-facing data tools</strong>Promote tables, views, or parameterized tools so agents call governed data surfaces instead of improvising queries.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Pros and Cons</h2>
+      <div class="proscons">
+        <div>
+          <h3>Strengths</h3>
+          <ul>
+            <li>Typed semantic operators make LLM calls reviewable parts of a query plan.</li>
+            <li>Lazy, DataFrame-style pipelines compose with ordinary filtering, joining, grouping, ordering, and SQL.</li>
+            <li>Model configuration lives at the session level, with provider support for language and embedding models.</li>
+            <li>Batching, rate limiting, retries, token and cost accounting, response caching, lineage, and metrics improve operability.</li>
+            <li><code>fenic check</code> gives agent-written Fenic code a static API sanity check before execution.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Risks and Friction</h3>
+          <ul>
+            <li>Local <code>.duckdb</code> files and caches create an artifact trail that teams must govern.</li>
+            <li>In the installed Fenic package, <code>lancedb</code> is a required dependency, and the current examples/configuration do not expose vector database selection as a user-facing option.</li>
+            <li>API usage can scale cost quickly if broad semantic operations run without sampling, caching, and budgets.</li>
+            <li>LLM outputs remain probabilistic and need evals, guardrails, and human review for high-impact flows.</li>
+            <li>The project is young enough that adoption, API stability, and operational playbooks should be validated through pilots.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Enterprise Readiness Matrix</h2>
+      <table>
+        <tbody>
+          <tr><th>Scalability</th><td>Promising for batched, repeatable semantic processing, but validate throughput against provider limits, large document sets, and local DuckDB/LanceDB behavior.</td></tr>
+<tr><th>Security</th><td>Treat prompts, source rows, outputs, caches, and local database files as sensitive data; enforce provider data-handling policy review before production use.</td></tr>
+<tr><th>Compliance</th><td>Typed schemas and inspectable plans help auditability, but regulated deployments still need retention controls, PII minimization, and approved model/provider boundaries.</td></tr>
+<tr><th>Cost Control</th><td>Session-level model configuration, batching, caching, and token/cost metrics are useful controls; teams still need budgets, sampling, and query review for broad runs.</td></tr>
+<tr><th>Observability</th><td>Fenic exposes plans, lineage, metrics, and rerunnable pipelines, which is materially better than notebook-only prompt chains.</td></tr>
+<tr><th>Reproducibility</th><td>Lazy typed pipelines and response caching improve repeatability, while probabilistic model behavior still requires evals and pinned model versions.</td></tr>
+<tr><th>Maintainability</th><td>Reusable DataFrame pipelines are easier to review than scattered ad hoc LLM calls; API maturity and team familiarity remain adoption risks.</td></tr>
+<tr><th>Integration Fit</th><td>Best fit for Python data/ML/analytics teams and agent tooling surfaces; less natural if the enterprise standardizes all processing inside a warehouse engine.</td></tr>
+<tr><th>Operational Maturity</th><td>Viable for pilots and controlled internal workflows today; production use should start behind careful data classification, cost guardrails, and artifact hygiene.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Local Evidence</h2>
+      <p>The local environment has <code>fenic==0.10.0</code> installed. Package metadata reports required dependencies including <code>duckdb</code> and <code>lancedb</code>, alongside OpenAI, pandas, polars, PyMuPDF, scikit-learn, tiktoken, and related runtime libraries.</p>
+      <p class="source-note"><strong>Installed dependency metadata:</strong> anthropic&gt;=0.106.0, boto3&gt;=1.38.28, botocore&gt;=1.38.28, cloudpickle&gt;=3.1.1, cohere&gt;=5.16.1, duckdb&gt;=1.1.3, fastmcp&gt;=3.2.0,&lt;4, fenic-cloud&gt;=0.1.3, google-genai[local-tokenizer]&gt;=1.56.0, grpcio&gt;=1.60.0, jinja2&gt;=3.1.6, json-schema-to-pydantic&gt;=0.4.1, lancedb&gt;=0.22.0,&lt;0.25.0, markdown-it-py&gt;=4.0.0, numpy&gt;=2.0.0, openai&gt;=1.101.0, pandas&gt;=2.2.2, polars&gt;=1.34.0,&lt;1.36.0, protobuf&gt;=5.29.5, pyarrow&gt;=23.0.1,&lt;23.0.2, pydantic-settings, pymupdf&gt;=1.26.4, scikit-learn&gt;=1.7.1, sqlglot&gt;=29.0.1,&lt;31.0.0, tiktoken&gt;=0.11.0, types-protobuf&gt;=5.29.1.20250403, zstandard&gt;=0.23.0</p>
+      <h3>Observed <code>.duckdb</code> artifacts</h3>
+      <ul><li><code>_fenic_operator_analyze_sentiment_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_classify_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_embed_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_extract_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_map_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_parse_pdf_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_predicate_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_reduce_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_semantic_join_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_sim_join_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_summarize_tmp_dfs.duckdb</code></li>
+<li><code>_fenic_operator_with_cluster_labels_tmp_dfs.duckdb</code></li>
+<li><code>fenic_operator_analyze_sentiment.duckdb</code></li>
+<li><code>fenic_operator_classify.duckdb</code></li>
+<li><code>fenic_operator_embed.duckdb</code></li>
+<li><code>fenic_operator_extract.duckdb</code></li>
+<li><code>fenic_operator_map.duckdb</code></li>
+<li><code>fenic_operator_parse_pdf.duckdb</code></li>
+<li><code>fenic_operator_predicate.duckdb</code></li>
+<li><code>fenic_operator_reduce.duckdb</code></li>
+<li><code>fenic_operator_semantic_join.duckdb</code></li>
+<li><code>fenic_operator_sim_join.duckdb</code></li>
+<li><code>fenic_operator_summarize.duckdb</code></li>
+<li><code>fenic_operator_with_cluster_labels.duckdb</code></li></ul>
+      <h3>Shared session configuration</h3>
+      <p class="source-note"><code>common.py</code> is excluded from the numbered gallery because it is shared setup, but it defines the OpenAI language and embedding model aliases used by the examples.</p>
+      <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+
+
+def get_session(app_name: str) -&gt; fc.Session:
+    config = fc.SessionConfig(
+        app_name=app_name,
+        semantic=fc.SemanticConfig(
+            language_models={
+                "mini": fc.OpenAILanguageModel(
+                    model_name="gpt-5.5",
+                    rpm=100,
+                    tpm=100_000,
+                )
+            },
+            default_language_model="mini",
+            embedding_models={
+                "small": fc.OpenAIEmbeddingModel(
+                    model_name="text-embedding-3-small",
+                    rpm=100,
+                    tpm=100_000,
+                )
+            },
+            default_embedding_model="small",
+        ),
+    )
+    return fc.Session.get_or_create(config)
+</code></pre>
+    </section>
+
+    <section>
+      <div class="panel">
+        <h2>Operator Script Gallery</h2>
+        <p>Each section below includes the script description, exact command, full source code, and captured console output from this workspace.</p>
+      </div>
+      
+            <article class="script-card" id="01_extract">
+              <div class="script-head">
+                <span class="eyebrow">Operator 01</span>
+                <h3>01_extract.py</h3>
+                <p>Extracts typed fields from messy support-ticket text using a Pydantic schema.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/01_extract.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+from pydantic import BaseModel, Field
+
+import fenic as fc
+from common import get_session
+
+
+class Ticket(BaseModel):
+    product: str = Field(description="Product or feature area mentioned by the user")
+    sentiment: str = Field(description="positive, neutral, or negative")
+    issue: str = Field(description="Short description of the issue or praise")
+
+
+session = get_session("fenic_operator_extract")
+
+df = session.create_dataframe(
+    [
+        {"id": 1, "text": "The CSV export in Reports times out every morning."},
+        {"id": 2, "text": "The new dashboard is fast and much easier to read."},
+    ]
+)
+
+result = df.select("id", fc.semantic.extract("text", Ticket).alias("ticket")).unnest("ticket")
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5):   0%|          | 0/2 [00:00&lt;?, ?req/s]
+Submitting requests for batch: a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5):  50%|█████     | 1/2 [00:00&lt;00:00, 46.68req/s, estimated_input_tokens=261, estimated_output_tokens=9216]
+Submitting requests for batch: a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5): 100%|██████████| 2/2 [00:00&lt;00:00, 80.66req/s, estimated_input_tokens=523, estimated_output_tokens=18432]
+Submitting requests for batch: a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5): 100%|██████████| 2/2 [00:00&lt;00:00, 80.18req/s, estimated_input_tokens=523, estimated_output_tokens=18432]
+
+Awaiting responses for batch a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5):   0%|          | 0/2 [00:00&lt;?, ?res/s]
+Awaiting responses for batch a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5):  50%|█████     | 1/2 [00:01&lt;00:01,  1.99s/res]
+Awaiting responses for batch a001a594-499a-4566-863b-491775e23345 (model: gpt-5.5): 100%|██████████| 2/2 [00:01&lt;00:00,  1.01res/s]
+┌────┬───────────────────────┬───────────┬────────────────────────────────────┐
+│ id ┆ product               ┆ sentiment ┆ issue                              │
+╞════╪═══════════════════════╪═══════════╪════════════════════════════════════╡
+│ 1  ┆ CSV export in Reports ┆ negative  ┆ CSV export times out every morning │
+│ 2  ┆ new dashboard         ┆ positive  ┆ Fast and much easier to read       │
+└────┴───────────────────────┴───────────┴────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="02_classify">
+              <div class="script-head">
+                <span class="eyebrow">Operator 02</span>
+                <h3>02_classify.py</h3>
+                <p>Classifies operational text into a fixed set of severity or issue labels.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/02_classify.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_classify")
+
+df = session.create_dataframe(
+    [
+        {"id": 1, "text": "Password reset fails after I enter the SMS code."},
+        {"id": 2, "text": "Please add CSV export to the analytics dashboard."},
+        {"id": 3, "text": "The checkout page returns a 500 error."},
+    ]
+)
+
+result = df.select(
+    "id",
+    "text",
+    fc.semantic.classify("text", ["bug", "feature_request", "account_help"]).alias("category"),
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):   0%|          | 0/3 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):  33%|███▎      | 1/3 [00:00&lt;00:00, 75.14req/s, estimated_input_tokens=63, estimated_output_tokens=8256]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):  67%|██████▋   | 2/3 [00:00&lt;00:00, 96.19req/s, estimated_input_tokens=125, estimated_output_tokens=16512]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5): 100%|██████████| 3/3 [00:00&lt;00:00, 122.84req/s, estimated_input_tokens=187, estimated_output_tokens=24768]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5): 100%|██████████| 3/3 [00:00&lt;00:00, 122.06req/s, estimated_input_tokens=187, estimated_output_tokens=24768]
+
+Awaiting responses for batch 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):   0%|          | 0/3 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):  33%|███▎      | 1/3 [00:03&lt;00:07,  3.81s/res]
+Awaiting responses for batch 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5): 100%|██████████| 3/3 [00:03&lt;00:00,  1.27s/res]
+┌────┬───────────────────────────────────────────────────┬─────────────────┐
+│ id ┆ text                                              ┆ category        │
+╞════╪═══════════════════════════════════════════════════╪═════════════════╡
+│ 1  ┆ Password reset fails after I enter the SMS code.  ┆ account_help    │
+│ 2  ┆ Please add CSV export to the analytics dashboard. ┆ feature_request │
+│ 3  ┆ The checkout page returns a 500 error.            ┆ bug             │
+└────┴───────────────────────────────────────────────────┴─────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="03_predicate">
+              <div class="script-head">
+                <span class="eyebrow">Operator 03</span>
+                <h3>03_predicate.py</h3>
+                <p>Filters rows with a natural-language boolean predicate instead of a brittle rule.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/03_predicate.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_predicate")
+
+df = session.create_dataframe(
+    [
+        {"id": 1, "text": "The app crashes when I upload a 200 MB PDF."},
+        {"id": 2, "text": "I love the cleaner billing page."},
+        {"id": 3, "text": "Dark mode would be nice on mobile."},
+    ]
+)
+
+result = df.filter(
+    fc.semantic.predicate(
+        "{{ text }} describes a product defect or broken behavior.",
+        text=fc.col("text"),
+    )
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5):   0%|          | 0/3 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5):  33%|███▎      | 1/3 [00:00&lt;00:00, 63.13req/s, estimated_input_tokens=94, estimated_output_tokens=8256]
+Submitting requests for batch: 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5):  67%|██████▋   | 2/3 [00:00&lt;00:00, 79.74req/s, estimated_input_tokens=183, estimated_output_tokens=16512]
+Submitting requests for batch: 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5): 100%|██████████| 3/3 [00:00&lt;00:00, 115.69req/s, estimated_input_tokens=273, estimated_output_tokens=24768]
+Submitting requests for batch: 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5): 100%|██████████| 3/3 [00:00&lt;00:00, 115.01req/s, estimated_input_tokens=273, estimated_output_tokens=24768]
+
+Awaiting responses for batch 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5):   0%|          | 0/3 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5):  33%|███▎      | 1/3 [00:02&lt;00:04,  2.39s/res]
+Awaiting responses for batch 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5): 100%|██████████| 3/3 [00:02&lt;00:00,  1.20res/s]
+Awaiting responses for batch 4a8aea05-6a7f-4d3b-8a5c-a25ca0b98c05 (model: gpt-5.5): 100%|██████████| 3/3 [00:02&lt;00:00,  1.01res/s]
+┌────┬─────────────────────────────────────────────┐
+│ id ┆ text                                        │
+╞════╪═════════════════════════════════════════════╡
+│ 1  ┆ The app crashes when I upload a 200 MB PDF. │
+└────┴─────────────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="04_map">
+              <div class="script-head">
+                <span class="eyebrow">Operator 04</span>
+                <h3>04_map.py</h3>
+                <p>Applies row-wise semantic transformations, including typed generated output.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/04_map.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_map")
+
+df = session.create_dataframe(
+    [
+        {
+            "id": 1,
+            "text": (
+                "I am trying to import a CSV with about 15,000 customer rows. "
+                "The upload finishes, but then the import button disappears and the page never "
+                "shows whether the import succeeded or failed. I have retried three times and "
+                "now I am worried we may have created duplicate records."
+            ),
+        },
+        {
+            "id": 2,
+            "text": (
+                "Our finance team exports invoices from the billing page every Friday. "
+                "The PDF includes the invoice number and customer name, but it does not include "
+                "the purchase order number that our accounting system requires. We have to add "
+                "that number by hand before sending invoices to customers."
+            ),
+        },
+    ]
+)
+
+result = df.select(
+    "id",
+    fc.semantic.map(
+        "Rewrite this customer note as a concise support ticket title: {{ text }}",
+        text=fc.col("text"),
+    ).alias("ticket_title"),
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):   0%|          | 0/2 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):  50%|█████     | 1/2 [00:00&lt;00:00, 73.54req/s, estimated_input_tokens=139, estimated_output_tokens=8704]
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:00&lt;00:00, 108.96req/s, estimated_input_tokens=273, estimated_output_tokens=17408]
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:00&lt;00:00, 108.17req/s, estimated_input_tokens=273, estimated_output_tokens=17408]
+
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):   0%|          | 0/2 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):  50%|█████     | 1/2 [00:01&lt;00:01,  1.52s/res]
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:02&lt;00:00,  1.08res/s]
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:02&lt;00:00,  1.02s/res]
+┌────┬───────────────────────────────────────────────────────────────────────┐
+│ id ┆ ticket_title                                                          │
+╞════╪═══════════════════════════════════════════════════════════════════════╡
+│ 1  ┆ CSV import status missing after upload and possible duplicate records │
+│ 2  ┆ Invoice PDFs missing purchase order number                            │
+└────┴───────────────────────────────────────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="05_reduce">
+              <div class="script-head">
+                <span class="eyebrow">Operator 05</span>
+                <h3>05_reduce.py</h3>
+                <p>Aggregates multiple text rows into a concise semantic summary.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/05_reduce.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_reduce")
+
+df = session.create_dataframe(
+    [
+        {"area": "billing", "note": "Invoice download is slow for enterprise accounts."},
+        {"area": "billing", "note": "Customers want purchase order numbers on invoices."},
+        {"area": "auth", "note": "SSO login fails on the mobile browser."},
+        {"area": "auth", "note": "Password reset emails sometimes arrive late."},
+    ]
+)
+
+result = df.group_by("area").agg(
+    fc.semantic.reduce(
+        "Summarize the common customer theme in one sentence.",
+        column=fc.col("note"),
+    ).alias("theme")
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: dca8245d-5b5b-441b-aa63-094e197de430 (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?req/s]
+
+Submitting requests for batch: 0a5b9ff0-7d8d-4547-9b09-135ac81d1686 (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?req/s][A
+Submitting requests for batch: dca8245d-5b5b-441b-aa63-094e197de430 (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 1180.83req/s, estimated_input_tokens=115, estimated_output_tokens=8704]
+Submitting requests for batch: dca8245d-5b5b-441b-aa63-094e197de430 (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 1018.53req/s, estimated_input_tokens=115, estimated_output_tokens=8704]
+
+Awaiting responses for batch dca8245d-5b5b-441b-aa63-094e197de430 (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?res/s]
+
+Submitting requests for batch: 0a5b9ff0-7d8d-4547-9b09-135ac81d1686 (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 883.57req/s, estimated_input_tokens=115, estimated_output_tokens=8704][A
+Submitting requests for batch: 0a5b9ff0-7d8d-4547-9b09-135ac81d1686 (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 799.68req/s, estimated_input_tokens=115, estimated_output_tokens=8704]
+
+
+Awaiting responses for batch 0a5b9ff0-7d8d-4547-9b09-135ac81d1686 (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?res/s][A
+Awaiting responses for batch dca8245d-5b5b-441b-aa63-094e197de430 (model: gpt-5.5): 100%|██████████| 1/1 [00:01&lt;00:00,  1.44s/res]
+Awaiting responses for batch dca8245d-5b5b-441b-aa63-094e197de430 (model: gpt-5.5): 100%|██████████| 1/1 [00:01&lt;00:00,  1.44s/res]
+
+
+Awaiting responses for batch 0a5b9ff0-7d8d-4547-9b09-135ac81d1686 (model: gpt-5.5): 100%|██████████| 1/1 [00:01&lt;00:00,  1.52s/res][A
+Awaiting responses for batch 0a5b9ff0-7d8d-4547-9b09-135ac81d1686 (model: gpt-5.5): 100%|██████████| 1/1 [00:01&lt;00:00,  1.52s/res]
+┌─────────┬────────────────────────────────────────────────────────────────────────────────┐
+│ area    ┆ theme                                                                          │
+╞═════════╪════════════════════════════════════════════════════════════════════════════════╡
+│ auth    ┆ Customers are experiencing authentication and account access issues.           │
+│ billing ┆ Customers are experiencing invoice-related issues and requesting improvements. │
+└─────────┴────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="06_analyze_sentiment">
+              <div class="script-head">
+                <span class="eyebrow">Operator 06</span>
+                <h3>06_analyze_sentiment.py</h3>
+                <p>Adds sentiment labels to user feedback with Fenic's built-in sentiment operator.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/06_analyze_sentiment.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_analyze_sentiment")
+
+df = session.create_dataframe(
+    [
+        {"id": 1, "text": "The new dashboard is beautiful and very fast."},
+        {"id": 2, "text": "The export job failed again and blocked my report."},
+        {"id": 3, "text": "I opened the account settings page."},
+    ]
+)
+
+result = df.select(
+    "id",
+    "text",
+    fc.semantic.analyze_sentiment("text").alias("sentiment"),
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5):   0%|          | 0/3 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5):  33%|███▎      | 1/3 [00:00&lt;00:00, 67.13req/s, estimated_input_tokens=1112, estimated_output_tokens=8256]
+Submitting requests for batch: 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5):  67%|██████▋   | 2/3 [00:00&lt;00:00, 65.82req/s, estimated_input_tokens=2225, estimated_output_tokens=16512]
+Submitting requests for batch: 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5): 100%|██████████| 3/3 [00:00&lt;00:00, 61.30req/s, estimated_input_tokens=3335, estimated_output_tokens=24768]
+Submitting requests for batch: 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5): 100%|██████████| 3/3 [00:00&lt;00:00, 61.11req/s, estimated_input_tokens=3335, estimated_output_tokens=24768]
+
+Awaiting responses for batch 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5):   0%|          | 0/3 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5):  33%|███▎      | 1/3 [00:01&lt;00:02,  1.18s/res]
+Awaiting responses for batch 1309fa6f-abf9-4cb5-b80e-7cb903aa3fe7 (model: gpt-5.5): 100%|██████████| 3/3 [00:01&lt;00:00,  2.55res/s]
+┌────┬────────────────────────────────────────────────────┬───────────┐
+│ id ┆ text                                               ┆ sentiment │
+╞════╪════════════════════════════════════════════════════╪═══════════╡
+│ 1  ┆ The new dashboard is beautiful and very fast.      ┆ positive  │
+│ 2  ┆ The export job failed again and blocked my report. ┆ negative  │
+│ 3  ┆ I opened the account settings page.                ┆ neutral   │
+└────┴────────────────────────────────────────────────────┴───────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="07_summarize">
+              <div class="script-head">
+                <span class="eyebrow">Operator 07</span>
+                <h3>07_summarize.py</h3>
+                <p>Summarizes longer source text into compact prose suitable for downstream workflows.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/07_summarize.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_summarize")
+
+df = session.create_dataframe(
+    [
+        {
+            "id": 1,
+            "text": (
+                "A finance manager at a regional retailer is preparing for the quarterly "
+                "business review and needs to export revenue, refund, and discount data from "
+                "the analytics dashboard. The export job starts normally and shows progress "
+                "for several minutes, but it fails with a timeout after processing roughly "
+                "eighty percent of the rows. The customer has tried the export in Chrome and "
+                "Edge, reduced the date range from a full quarter to one month, and removed "
+                "several optional columns, but the job still fails. Smaller exports for a "
+                "single store work correctly, which suggests the issue is related to data "
+                "volume rather than permissions or browser settings. The customer needs the "
+                "CSV before an executive meeting tomorrow morning and is currently copying "
+                "figures by hand from dashboard cards into a spreadsheet. They are asking for "
+                "either a workaround, a backend export, or confirmation that engineering can "
+                "increase the timeout for large report downloads."
+            ),
+        }
+    ]
+)
+
+result = df.select("id", fc.semantic.summarize("text").alias("summary"))
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 61.31req/s, estimated_input_tokens=362, estimated_output_tokens=8372]
+Submitting requests for batch: 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 60.66req/s, estimated_input_tokens=362, estimated_output_tokens=8372]
+
+Awaiting responses for batch 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:02&lt;00:00,  2.27s/res]
+Awaiting responses for batch 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:02&lt;00:00,  2.27s/res]
+┌────┬─────────────────────────────────────────────────────────────────────────────────────────────┐
+│ id ┆ summary                                                                                     │
+╞════╪═════════════════════════════════════════════════════════════════════════════════════════════╡
+│ 1  ┆ A finance manager needs revenue, refund, and discount data exported from an analytics       │
+│    ┆ dashboard for a quarterly business review. The export starts and progresses for several     │
+│    ┆ minutes but times out after processing about 80% of rows. Attempts in Chrome and Edge, a    │
+│    ┆ reduced one-month date range, and fewer optional columns have not resolved the issue,       │
+│    ┆ though single-store exports work, suggesting a data-volume problem rather than permissions  │
+│    ┆ or browser settings. The customer needs the CSV before an executive meeting tomorrow        │
+│    ┆ morning and is manually copying dashboard figures. They are requesting a workaround,        │
+│    ┆ backend export, or engineering confirmation that the timeout can be increased for large     │
+│    ┆ downloads.                                                                                  │
+└────┴─────────────────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="08_embed">
+              <div class="script-head">
+                <span class="eyebrow">Operator 08</span>
+                <h3>08_embed.py</h3>
+                <p>Generates embedding vectors for text rows so they can be searched, clustered, or joined by similarity.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/08_embed.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_embed")
+
+df = session.create_dataframe(
+    [
+        {"id": 1, "text": "Reset a forgotten password."},
+        {"id": 2, "text": "Export dashboard data as CSV."},
+    ]
+)
+
+result = df.select("id", "text", fc.semantic.embed("text").alias("embedding"))
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small):   0%|          | 0/2 [00:00&lt;?, ?req/s]
+Submitting requests for batch: d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00&lt;00:00, 71.06req/s, estimated_input_tokens=5, estimated_output_tokens=0]
+Submitting requests for batch: d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 110.28req/s, estimated_input_tokens=11, estimated_output_tokens=0]
+Submitting requests for batch: d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 108.96req/s, estimated_input_tokens=11, estimated_output_tokens=0]
+
+Awaiting responses for batch d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small):   0%|          | 0/2 [00:00&lt;?, ?res/s]
+Awaiting responses for batch d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00&lt;00:00,  3.95res/s]
+Awaiting responses for batch d83d9cf7-a8be-4087-a2d1-a25520154243 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00,  6.04res/s]
+┌────┬───────────────────────────────┬────────────────────────────────────┐
+│ id ┆ text                          ┆ embedding                          │
+╞════╪═══════════════════════════════╪════════════════════════════════════╡
+│ 1  ┆ Reset a forgotten password.   ┆ [-0.00462, -0.012955, … 0.007275]  │
+│ 2  ┆ Export dashboard data as CSV. ┆ [-0.04422, -0.018326, … -0.034729] │
+└────┴───────────────────────────────┴────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="09_parse_pdf">
+              <div class="script-head">
+                <span class="eyebrow">Operator 09</span>
+                <h3>09_parse_pdf.py</h3>
+                <p>Parses PDF content into Markdown-like text for downstream semantic processing.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/09_parse_pdf.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+from pathlib import Path
+
+import fenic as fc
+from common import get_session
+
+
+def write_minimal_pdf(path: Path) -&gt; None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(
+        b"%PDF-1.4\n"
+        b"1 0 obj&lt;&lt;/Type/Catalog/Pages 2 0 R&gt;&gt;endobj\n"
+        b"2 0 obj&lt;&lt;/Type/Pages/Count 1/Kids[3 0 R]&gt;&gt;endobj\n"
+        b"3 0 obj&lt;&lt;/Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Contents 4 0 R/Resources&lt;&lt;/Font&lt;&lt;/F1 5 0 R&gt;&gt;&gt;&gt;&gt;&gt;endobj\n"
+        b"4 0 obj&lt;&lt;/Length 68&gt;&gt;stream\nBT /F1 18 Tf 72 720 Td (Fenic parses PDF files into Markdown.) Tj ET\nendstream\nendobj\n"
+        b"5 0 obj&lt;&lt;/Type/Font/Subtype/Type1/BaseFont/Helvetica&gt;&gt;endobj\n"
+        b"xref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000056 00000 n \n"
+        b"0000000111 00000 n \n0000000223 00000 n \n0000000341 00000 n \n"
+        b"trailer&lt;&lt;/Size 6/Root 1 0 R&gt;&gt;\nstartxref\n411\n%%EOF\n"
+    )
+
+
+session = get_session("fenic_operator_parse_pdf")
+pdf_path = Path(__file__).with_name("sample_parse_pdf.pdf")
+markdown_path = pdf_path.with_suffix(".md")
+write_minimal_pdf(pdf_path)
+
+df = session.create_dataframe([{"id": 1, "pdf_path": str(pdf_path)}])
+
+result = df.select(
+    "id",
+    fc.semantic.parse_pdf("pdf_path", page_separator="\n\n--- page {page} ---\n\n").alias("markdown"),
+)
+
+rows = result.to_pylist()
+markdown = rows[0]["markdown"]
+
+print(markdown)
+markdown_path.write_text(markdown, encoding="utf-8")
+print(f"\nWrote parsed markdown to {markdown_path}")
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 988bcbcf-ddac-4a84-ad3e-b0790430b00a (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 988bcbcf-ddac-4a84-ad3e-b0790430b00a (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 207.25req/s, estimated_input_tokens=1164, estimated_output_tokens=8200]
+Submitting requests for batch: 988bcbcf-ddac-4a84-ad3e-b0790430b00a (model: gpt-5.5): 100%|██████████| 1/1 [00:00&lt;00:00, 200.16req/s, estimated_input_tokens=1164, estimated_output_tokens=8200]
+
+Awaiting responses for batch 988bcbcf-ddac-4a84-ad3e-b0790430b00a (model: gpt-5.5):   0%|          | 0/1 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 988bcbcf-ddac-4a84-ad3e-b0790430b00a (model: gpt-5.5): 100%|██████████| 1/1 [00:01&lt;00:00,  1.61s/res]
+Awaiting responses for batch 988bcbcf-ddac-4a84-ad3e-b0790430b00a (model: gpt-5.5): 100%|██████████| 1/1 [00:01&lt;00:00,  1.61s/res]
+# Fenic
+
+Fenic parses PDF files into Markdown.
+
+Wrote parsed markdown to D:\projects\ai-playground-01\fenic\scripts\operators\sample_parse_pdf.md
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="10_semantic_join">
+              <div class="script-head">
+                <span class="eyebrow">Operator 10</span>
+                <h3>10_semantic_join.py</h3>
+                <p>Joins two DataFrames with a natural-language match predicate.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/10_semantic_join.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_semantic_join")
+
+tickets = session.create_dataframe(
+    [
+        {"ticket_id": 1, "text": "I cannot log in after the SSO redirect."},
+        {"ticket_id": 2, "text": "The CSV export for reports is timing out."},
+    ]
+)
+
+teams = session.create_dataframe(
+    [
+        {"team": "Identity", "responsibility": "Authentication, SSO, login, and account access."},
+        {"team": "Analytics", "responsibility": "Reports, dashboards, exports, and metrics."},
+    ]
+)
+
+result = tickets.semantic.join(
+    teams,
+    predicate="{{ left_on }} should be handled by the team responsible for {{ right_on }}",
+    left_on=fc.col("text"),
+    right_on=fc.col("responsibility"),
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5):   0%|          | 0/4 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5):  25%|██▌       | 1/4 [00:00&lt;00:00, 74.80req/s, estimated_input_tokens=103, estimated_output_tokens=8256]
+Submitting requests for batch: 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5):  50%|█████     | 2/4 [00:00&lt;00:00, 77.94req/s, estimated_input_tokens=204, estimated_output_tokens=16512]
+Submitting requests for batch: 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5):  75%|███████▌  | 3/4 [00:00&lt;00:00, 110.33req/s, estimated_input_tokens=306, estimated_output_tokens=24768]
+Submitting requests for batch: 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5): 100%|██████████| 4/4 [00:00&lt;00:00, 138.65req/s, estimated_input_tokens=406, estimated_output_tokens=33024]
+Submitting requests for batch: 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5): 100%|██████████| 4/4 [00:00&lt;00:00, 137.85req/s, estimated_input_tokens=406, estimated_output_tokens=33024]
+
+Awaiting responses for batch 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5):   0%|          | 0/4 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5):  25%|██▌       | 1/4 [00:03&lt;00:11,  3.84s/res]
+Awaiting responses for batch 99a500d2-4352-44b1-887f-f0b1ff8be2ec (model: gpt-5.5): 100%|██████████| 4/4 [00:03&lt;00:00,  1.04res/s]
+┌───────────┬───────────────────────────────┬───────────┬──────────────────────────────────────────┐
+│ ticket_id ┆ text                          ┆ team      ┆ responsibility                           │
+╞═══════════╪═══════════════════════════════╪═══════════╪══════════════════════════════════════════╡
+│ 1         ┆ I cannot log in after the SSO ┆ Identity  ┆ Authentication, SSO, login, and account  │
+│           ┆ redirect.                     ┆           ┆ access.                                  │
+│ 2         ┆ The CSV export for reports is ┆ Analytics ┆ Reports, dashboards, exports, and        │
+│           ┆ timing out.                   ┆           ┆ metrics.                                 │
+└───────────┴───────────────────────────────┴───────────┴──────────────────────────────────────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="11_sim_join">
+              <div class="script-head">
+                <span class="eyebrow">Operator 11</span>
+                <h3>11_sim_join.py</h3>
+                <p>Performs an embedding similarity join against labeled descriptions.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/11_sim_join.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_sim_join")
+
+queries = session.create_dataframe(
+    [
+        {"query_id": 1, "query": "How do I reset my password?"},
+        {"query_id": 2, "query": "Can I download report data as CSV?"},
+    ]
+)
+
+docs = session.create_dataframe(
+    [
+        {"doc_id": "auth", "title": "Account access and password recovery"},
+        {"doc_id": "reports", "title": "Exporting analytics reports"},
+    ]
+)
+
+result = queries.semantic.sim_join(
+    docs,
+    left_on=fc.semantic.embed("query"),
+    right_on=fc.semantic.embed("title"),
+    k=1,
+    similarity_score_column="score",
+)
+
+result.show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):   0%|          | 0/2 [00:00&lt;?, ?req/s]
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00&lt;00:00, 75.33req/s, estimated_input_tokens=7, estimated_output_tokens=0]
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 123.59req/s, estimated_input_tokens=15, estimated_output_tokens=0]
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 122.51req/s, estimated_input_tokens=15, estimated_output_tokens=0]
+
+Awaiting responses for batch 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):   0%|          | 0/2 [00:00&lt;?, ?res/s]
+Awaiting responses for batch 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00&lt;00:00,  5.32res/s]
+Awaiting responses for batch 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00,  9.09res/s]
+
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):   0%|          | 0/2 [00:00&lt;?, ?req/s]
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00&lt;00:00, 1625.70req/s, estimated_input_tokens=5, estimated_output_tokens=0]
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 348.41req/s, estimated_input_tokens=9, estimated_output_tokens=0] 
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 334.73req/s, estimated_input_tokens=9, estimated_output_tokens=0]
+
+Awaiting responses for batch e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):   0%|          | 0/2 [00:00&lt;?, ?res/s]
+Awaiting responses for batch e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00&lt;00:00,  6.92res/s]
+Awaiting responses for batch e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00&lt;00:00, 11.25res/s]
+┌──────────┬────────────────────────────────────┬─────────┬─────────────────────────────┬──────────┐
+│ query_id ┆ query                              ┆ doc_id  ┆ title                       ┆ score    │
+╞══════════╪════════════════════════════════════╪═════════╪═════════════════════════════╪══════════╡
+│ 1        ┆ How do I reset my password?        ┆ auth    ┆ Account access and password ┆ 0.46588  │
+│          ┆                                    ┆         ┆ recovery                    ┆          │
+│ 2        ┆ Can I download report data as CSV? ┆ reports ┆ Exporting analytics reports ┆ 0.399915 │
+└──────────┴────────────────────────────────────┴─────────┴─────────────────────────────┴──────────┘
+</code></pre>
+              </details>
+            </article>
+            
+
+            <article class="script-card" id="12_with_cluster_labels">
+              <div class="script-head">
+                <span class="eyebrow">Operator 12</span>
+                <h3>12_with_cluster_labels.py</h3>
+                <p>Clusters embedding vectors and attaches cluster labels to rows.</p>
+              </div>
+              <div class="command"><span>Command</span><code>python fenic/scripts/operators/12_with_cluster_labels.py</code></div>
+              <details open>
+                <summary>Source code</summary>
+                <pre class="codeblock"><code class="language-python">from __future__ import annotations
+
+import fenic as fc
+from common import get_session
+
+
+session = get_session("fenic_operator_with_cluster_labels")
+
+df = session.create_dataframe(
+    [
+        {"id": 1, "text": "Password reset email never arrived."},
+        {"id": 2, "text": "SSO login redirects forever."},
+        {"id": 3, "text": "CSV export from dashboard is slow."},
+        {"id": 4, "text": "Report download times out."},
+    ]
+)
+
+result = df.semantic.with_cluster_labels(
+    by=fc.semantic.embed("text"),
+    num_clusters=2,
+    label_column="cluster",
+)
+
+result.order_by(["cluster", "id"]).show()
+</code></pre>
+              </details>
+              <details open>
+                <summary>Captured console output</summary>
+                <pre class="codeblock"><code class="language-text">
+Submitting requests for batch: bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):   0%|          | 0/4 [00:00&lt;?, ?req/s]
+Submitting requests for batch: bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):  25%|██▌       | 1/4 [00:00&lt;00:00, 73.37req/s, estimated_input_tokens=6, estimated_output_tokens=0]
+Submitting requests for batch: bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):  50%|█████     | 2/4 [00:00&lt;00:00, 121.57req/s, estimated_input_tokens=12, estimated_output_tokens=0]
+Submitting requests for batch: bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):  75%|███████▌  | 3/4 [00:00&lt;00:00, 174.45req/s, estimated_input_tokens=19, estimated_output_tokens=0]
+Submitting requests for batch: bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small): 100%|██████████| 4/4 [00:00&lt;00:00, 221.02req/s, estimated_input_tokens=24, estimated_output_tokens=0]
+Submitting requests for batch: bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small): 100%|██████████| 4/4 [00:00&lt;00:00, 219.39req/s, estimated_input_tokens=24, estimated_output_tokens=0]
+
+Awaiting responses for batch bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):   0%|          | 0/4 [00:00&lt;?, ?res/s]
+Awaiting responses for batch bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):  25%|██▌       | 1/4 [00:00&lt;00:00,  5.58res/s]
+Awaiting responses for batch bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small):  75%|███████▌  | 3/4 [00:00&lt;00:00,  5.87res/s]
+Awaiting responses for batch bd1943e3-c0d3-46b7-9702-86ab79d1c79c (model: text-embedding-3-small): 100%|██████████| 4/4 [00:00&lt;00:00,  7.79res/s]
+┌────┬─────────────────────────────────────┬─────────┐
+│ id ┆ text                                ┆ cluster │
+╞════╪═════════════════════════════════════╪═════════╡
+│ 1  ┆ Password reset email never arrived. ┆ 0       │
+│ 2  ┆ SSO login redirects forever.        ┆ 0       │
+│ 3  ┆ CSV export from dashboard is slow.  ┆ 1       │
+│ 4  ┆ Report download times out.          ┆ 1       │
+└────┴─────────────────────────────────────┴─────────┘
+</code></pre>
+              </details>
+            </article>
+            
+    </section>
+  </main>
+
+  <footer>
+    <p>Generated from local scripts under <code>fenic/scripts/operators/</code> and outputs under <code>fenic/operator_outputs/</code>. External source consulted: <a href="https://github.com/typedef-ai/fenic">typedef-ai/fenic README</a>.</p>
+  </footer>
+</body>
+</html>
