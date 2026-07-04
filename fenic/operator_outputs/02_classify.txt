@@ -1,0 +1,17 @@
+
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):   0%|          | 0/3 [00:00<?, ?req/s]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):  33%|███▎      | 1/3 [00:00<00:00, 75.14req/s, estimated_input_tokens=63, estimated_output_tokens=8256]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):  67%|██████▋   | 2/3 [00:00<00:00, 96.19req/s, estimated_input_tokens=125, estimated_output_tokens=16512]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5): 100%|██████████| 3/3 [00:00<00:00, 122.84req/s, estimated_input_tokens=187, estimated_output_tokens=24768]
+Submitting requests for batch: 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5): 100%|██████████| 3/3 [00:00<00:00, 122.06req/s, estimated_input_tokens=187, estimated_output_tokens=24768]
+
+Awaiting responses for batch 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):   0%|          | 0/3 [00:00<?, ?res/s]
+Awaiting responses for batch 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5):  33%|███▎      | 1/3 [00:03<00:07,  3.81s/res]
+Awaiting responses for batch 2faa3748-bda3-47d8-9fca-125d610a661e (model: gpt-5.5): 100%|██████████| 3/3 [00:03<00:00,  1.27s/res]
+┌────┬───────────────────────────────────────────────────┬─────────────────┐
+│ id ┆ text                                              ┆ category        │
+╞════╪═══════════════════════════════════════════════════╪═════════════════╡
+│ 1  ┆ Password reset fails after I enter the SMS code.  ┆ account_help    │
+│ 2  ┆ Please add CSV export to the analytics dashboard. ┆ feature_request │
+│ 3  ┆ The checkout page returns a 500 error.            ┆ bug             │
+└────┴───────────────────────────────────────────────────┴─────────────────┘

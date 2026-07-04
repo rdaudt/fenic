@@ -1,0 +1,16 @@
+
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):   0%|          | 0/2 [00:00<?, ?req/s]
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):  50%|█████     | 1/2 [00:00<00:00, 73.54req/s, estimated_input_tokens=139, estimated_output_tokens=8704]
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:00<00:00, 108.96req/s, estimated_input_tokens=273, estimated_output_tokens=17408]
+Submitting requests for batch: 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:00<00:00, 108.17req/s, estimated_input_tokens=273, estimated_output_tokens=17408]
+
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):   0%|          | 0/2 [00:00<?, ?res/s]
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5):  50%|█████     | 1/2 [00:01<00:01,  1.52s/res]
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:02<00:00,  1.08res/s]
+Awaiting responses for batch 00bd6aeb-107e-45a1-8f85-585277bfb9b3 (model: gpt-5.5): 100%|██████████| 2/2 [00:02<00:00,  1.02s/res]
+┌────┬───────────────────────────────────────────────────────────────────────┐
+│ id ┆ ticket_title                                                          │
+╞════╪═══════════════════════════════════════════════════════════════════════╡
+│ 1  ┆ CSV import status missing after upload and possible duplicate records │
+│ 2  ┆ Invoice PDFs missing purchase order number                            │
+└────┴───────────────────────────────────────────────────────────────────────┘

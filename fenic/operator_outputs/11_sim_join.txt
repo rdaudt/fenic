@@ -1,0 +1,25 @@
+
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):   0%|          | 0/2 [00:00<?, ?req/s]
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00<00:00, 75.33req/s, estimated_input_tokens=7, estimated_output_tokens=0]
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00<00:00, 123.59req/s, estimated_input_tokens=15, estimated_output_tokens=0]
+Submitting requests for batch: 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00<00:00, 122.51req/s, estimated_input_tokens=15, estimated_output_tokens=0]
+
+Awaiting responses for batch 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):   0%|          | 0/2 [00:00<?, ?res/s]
+Awaiting responses for batch 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00<00:00,  5.32res/s]
+Awaiting responses for batch 131e6e59-3ca8-490b-8552-bcf34c7eddd3 (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00<00:00,  9.09res/s]
+
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):   0%|          | 0/2 [00:00<?, ?req/s]
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00<00:00, 1625.70req/s, estimated_input_tokens=5, estimated_output_tokens=0]
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00<00:00, 348.41req/s, estimated_input_tokens=9, estimated_output_tokens=0] 
+Submitting requests for batch: e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00<00:00, 334.73req/s, estimated_input_tokens=9, estimated_output_tokens=0]
+
+Awaiting responses for batch e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):   0%|          | 0/2 [00:00<?, ?res/s]
+Awaiting responses for batch e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small):  50%|█████     | 1/2 [00:00<00:00,  6.92res/s]
+Awaiting responses for batch e5f1b2f5-e06f-446b-a70b-cdc75b4d918f (model: text-embedding-3-small): 100%|██████████| 2/2 [00:00<00:00, 11.25res/s]
+┌──────────┬────────────────────────────────────┬─────────┬─────────────────────────────┬──────────┐
+│ query_id ┆ query                              ┆ doc_id  ┆ title                       ┆ score    │
+╞══════════╪════════════════════════════════════╪═════════╪═════════════════════════════╪══════════╡
+│ 1        ┆ How do I reset my password?        ┆ auth    ┆ Account access and password ┆ 0.46588  │
+│          ┆                                    ┆         ┆ recovery                    ┆          │
+│ 2        ┆ Can I download report data as CSV? ┆ reports ┆ Exporting analytics reports ┆ 0.399915 │
+└──────────┴────────────────────────────────────┴─────────┴─────────────────────────────┴──────────┘

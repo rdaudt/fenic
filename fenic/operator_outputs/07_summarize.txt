@@ -1,0 +1,21 @@
+
+Submitting requests for batch: 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5):   0%|          | 0/1 [00:00<?, ?req/s]
+Submitting requests for batch: 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:00<00:00, 61.31req/s, estimated_input_tokens=362, estimated_output_tokens=8372]
+Submitting requests for batch: 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:00<00:00, 60.66req/s, estimated_input_tokens=362, estimated_output_tokens=8372]
+
+Awaiting responses for batch 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5):   0%|          | 0/1 [00:00<?, ?res/s]
+Awaiting responses for batch 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:02<00:00,  2.27s/res]
+Awaiting responses for batch 1b98f659-a874-4e45-b087-7b4b99eaeee2 (model: gpt-5.5): 100%|██████████| 1/1 [00:02<00:00,  2.27s/res]
+┌────┬─────────────────────────────────────────────────────────────────────────────────────────────┐
+│ id ┆ summary                                                                                     │
+╞════╪═════════════════════════════════════════════════════════════════════════════════════════════╡
+│ 1  ┆ A finance manager needs revenue, refund, and discount data exported from an analytics       │
+│    ┆ dashboard for a quarterly business review. The export starts and progresses for several     │
+│    ┆ minutes but times out after processing about 80% of rows. Attempts in Chrome and Edge, a    │
+│    ┆ reduced one-month date range, and fewer optional columns have not resolved the issue,       │
+│    ┆ though single-store exports work, suggesting a data-volume problem rather than permissions  │
+│    ┆ or browser settings. The customer needs the CSV before an executive meeting tomorrow        │
+│    ┆ morning and is manually copying dashboard figures. They are requesting a workaround,        │
+│    ┆ backend export, or engineering confirmation that the timeout can be increased for large     │
+│    ┆ downloads.                                                                                  │
+└────┴─────────────────────────────────────────────────────────────────────────────────────────────┘
